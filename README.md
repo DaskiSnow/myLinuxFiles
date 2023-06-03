@@ -1,2 +1,2 @@
 # myLinuxFiles
-用于存储学习Linux系统编程的文件
+用于存储学习 C/C++ Linux后端 的代码
