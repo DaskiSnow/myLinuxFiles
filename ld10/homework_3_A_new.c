@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
         wret = write(fdw, buf, n);
         ERROR_CHECK(wret, -1, "write content");
     }
+    
 
     // 发送完毕
     printf("Send over! File: %s, Size: %d\n", meta_info.file_name, meta_info.size);

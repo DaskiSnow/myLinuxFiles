@@ -29,21 +29,26 @@ int main(int argc, char* argv[])
     rret = read(fdr, &meta_info, sizeof(meta_info));
     ERROR_CHECK(rret, -1, "read meta_info");
 
+    // 若目录不存在，创建一个目录
+    if(access(argv[2], F_OK) == -1) {
+        int ret_mkdir = mkdir(argv[2], 0775);
+        ERROR_CHECK(ret_mkdir, -1, "mkdir");
+    }
     // 新建目录,新建文件
-    int ret_mkdir = mkdir(argv[2], 0775);
-    ERROR_CHECK(ret_mkdir, -1, "mkdir");
     int ret_chdir = chdir(argv[2]); // 改变当前工作目录
     ERROR_CHECK(ret_chdir, -1, "chdir");
     int fdw = open(meta_info.file_name, O_WRONLY | O_TRUNC | O_CREAT, 0666);
     ERROR_CHECK(fdw, -1, "open fdw");
 
-    // 开始接收文件内容
+    // 开始接收文件内容: 先接收头，再接收文件内容
     char buf[4096];
     int n;
     while(1){
-        n = read(fdr, buf, sizeof(buf));
-        ERROR_CHECK(n, -1, "read content");
+        n = read(fdr, &head, sizeof(head));
+        ERROR_CHECK(n, -1, "read head");
         if(n == 0) break;
+        n = read(fdr, buf, head.length);
+        ERROR_CHECK(n, -1, "read content");
         int wret = write(fdw, buf, n);
         ERROR_CHECK(wret, -1, "write content");
     }
