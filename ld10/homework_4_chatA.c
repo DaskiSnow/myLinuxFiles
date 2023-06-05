@@ -21,25 +21,28 @@ int main(int argc, char* argv[])
         timeout.tv_usec = 0;
         select(fdr+1, &rdset, NULL, NULL, &timeout);
         time_t time_cur = time(NULL);
+        
+        // 获取日历时间
+        time_t stime = time(NULL);
+        struct tm* calendar_timep = localtime(&stime);
+        
         if(FD_ISSET(STDIN_FILENO, &rdset)) {
             memset(buf, 0, sizeof(buf));
             int rret = read(STDIN_FILENO, buf, sizeof(buf)-1); // 留一个给空字符
             if(rret == 0) {
                 printf("--------Detect [off signal] from STDIN. Chat is closing!\n");
+
+            // 发送消息内容前，先发送日历信息
+            write(fdw, calendar_timep, sizeof(*calendar_timep));
                 write(fdw, "Bye!\n", 16);
                 break;
             }
-
-            // 获取日历时间
-            time_t stime = time(NULL);
-            struct tm* calendar_timep = localtime(&stime);
 
             // 发送消息内容前，先发送日历信息
             write(fdw, calendar_timep, sizeof(*calendar_timep));
             // free(calendar_timep);
 
             // 发送消息内容
-            memset(buf, 0, sizeof(buf));
             write(fdw, buf, strlen(buf));
         }
         if(FD_ISSET(fdr, &rdset)){
@@ -57,7 +60,7 @@ int main(int argc, char* argv[])
             memset(buf, 0, sizeof(buf));
             read(fdr, buf, sizeof(buf));
             printf("====(%d/%d/%d weekday-%d %d:%d:%d)From ChatB: %s",
-                   calendar_time.tm_year,
+                   calendar_time.tm_year + 1900,
                    calendar_time.tm_mon, 
                    calendar_time.tm_mday,
                    calendar_time.tm_wday,
@@ -68,6 +71,10 @@ int main(int argc, char* argv[])
         }
         if(time_cur - time_la > 50) {
             printf("--------No message received from ChatB for 10s. Chat is closing!\n");
+            
+            // 发送消息内容前，先发送日历信息
+            write(fdw, calendar_timep, sizeof(*calendar_timep));
+           
             write(fdw, "You didn't talk for 10s. Bye!\n", 32);
             break;
         }
