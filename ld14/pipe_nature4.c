@@ -11,14 +11,17 @@ int main(int argc, char* argv[])
     // 创建父子进程, 父读端，子写端 
     if(fork()){
         close(fds[1]);
+
         wait(NULL);
-        int rret = read(fds[0], buf, sizeof(buf));
-        printf("rret = %d\n", rret);
+
+        ssize_t rret = read(fds[0], buf, sizeof(buf));
+        printf("rret = %ld\n", rret);
         return 0;
     }
     else{
         close(fds[0]);
-        close(fds[1]);
+
+        close(fds[1]); // 子写端关闭
         return 0;
     }
 }

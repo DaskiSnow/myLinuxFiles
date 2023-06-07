@@ -1,8 +1,9 @@
 #include <func.h>
 
 void handler(int signum) {
+    printf("\nBefore signum = %d\n", signum);
     sleep(5);
-    printf("signal %d has been handled.\n", signum);
+    printf("\nAfter signum = %d\n", signum);
 }
 
 int main(int argc, char* argv[])

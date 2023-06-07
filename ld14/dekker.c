@@ -8,12 +8,12 @@ int main(int argc, char* argv[])
     int count = 0;
 
     // 建立共享内存
-    int shmid = shmget(250, 4096, IPC_CREAT | 0600);
+    int shmid = shmget(IPC_PRIVATE, 4096, 0600); // 注意key的值IPC_PRIVATE,shmflag只需指定低9位。
     ERROR_CHECK(shmid, -1, "shmget");
 
     // 建立映射
     int* shm_arr = (int*)shmat(shmid, NULL, 0);
-    ERROR_CHECK(shm_arr, NULL, "shmat");
+    ERROR_CHECK(shm_arr, (void*)-1, "shmat");
 
     shm_arr[0] = 0; // 存储结果
     shm_arr[1] = 0; // enter
@@ -43,7 +43,8 @@ int main(int argc, char* argv[])
         }
         wait(NULL);
         printf("Final result = %d\n", shm_arr[0]);
-        shmdt(shm_arr);
+        int ret_dt = shmdt(shm_arr);
+        ERROR_CHECK(ret_dt, -1, "shmdt");
     }
     else{
         while(1){    
@@ -67,7 +68,8 @@ int main(int argc, char* argv[])
             shm_arr[3] = 0;
             shm_arr[2] = 0;
         }
-        shmdt(shm_arr);
+        int ret_dt = shmdt(shm_arr);
+        ERROR_CHECK(ret_dt, -1, "shmdt");
     }
     return 0;
 }

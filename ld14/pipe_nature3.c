@@ -13,18 +13,24 @@ int main(int argc, char* argv[])
         close(fds[1]);
 
         close(fds[0]); //关闭读端
-        wait(NULL);
+
+        int wstatus;
+        wait(&wstatus);
+        if(WIFSIGNALED(wstatus)) {
+            printf("temsig = %d\n", WTERMSIG(wstatus));
+        }
+
         return 0;
     }
     else{
         close(fds[0]);
 
         sleep(5); // 保证读端关闭了
-        while(1) {
-            int wret = write(fds[1], "Message from child.\n", 19);
-            ERROR_CHECK(wret, -1, "write");
-            printf("Child write!\n");
-        }
+        int wret = write(fds[1], buf, 2048);
+        ERROR_CHECK(wret, -1, "write");
+
+        close(fds[1]);
+
         return 0;
     }
 }
