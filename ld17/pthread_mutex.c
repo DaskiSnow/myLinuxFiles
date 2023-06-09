@@ -25,10 +25,12 @@ int main(int argc, char* argv[])
     shared.num = 0;
     pthread_mutex_init(&shared.mutex, NULL);
 
+    // 创建子线程
     pthread_t tid;
-    pthread_create(&tid, NULL, threadFun, &shared);
+    int ret_create = pthread_create(&tid, NULL, threadFun, &shared);
+    THREAD_ERROR_CHECK(ret_create, "pthread_create");
     
-
+    // 执行加法，并获取两线程运行时间
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
     for(int i = 0; i < NUM; i++) {
@@ -36,9 +38,11 @@ int main(int argc, char* argv[])
         shared.num++;
         pthread_mutex_unlock(&shared.mutex);
     }
-    pthread_join(tid, NULL);
+    int ret_join = pthread_join(tid, NULL);
+    THREAD_ERROR_CHECK(ret_join, "pthread_join");
     gettimeofday(&tv_end, NULL);
     
+    // 总时间做除法，得到大概的lock时间
     long time_total = 
         (long)(tv_end.tv_sec - tv_start.tv_sec)*1000000000 + 
         (long)(tv_end.tv_usec - tv_start.tv_usec)*1000;
@@ -47,6 +51,8 @@ int main(int argc, char* argv[])
     printf("Lock/unlock cost time = %lf ns\n", cost);
     printf("num = %ld\n", shared.num);
 
+    // 销毁锁
+    pthread_mutex_destroy(&shared.mutex);
     return 0;
 }
 

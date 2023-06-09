@@ -17,10 +17,14 @@ void* threadFun(void* arg) {
 
 int main(int argc, char* argv[])
 {
+    // 初始化互斥锁
     pthread_mutex_t mutex;
     pthread_mutex_init(&mutex, NULL);
+
+    // 创建子线程
     pthread_t tid;
-    pthread_create(&tid, NULL, threadFun, &mutex);
+    int ret_create = pthread_create(&tid, NULL, threadFun, &mutex);
+    THREAD_ERROR_CHECK(ret_create, "pthread_create");
 
     while(1){
         if(turn == 0) {
