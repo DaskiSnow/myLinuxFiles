@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
     while(1){
         if(turn == 0) {
-            pthread_mutex_lock(&mutex);
+            pthread_mutex_trylock(&mutex);
             printf("Before A!\n");
             sleep(3);
             printf("After A\n");
