@@ -1,17 +1,25 @@
 #include <func.h>
-void sigfunc(int signum, siginfo_t *p, void *p1){
-    printf("%d is coming\n", signum);//必须添加\n
-} 
-int main()
-{
-    struct sigaction act;
-    memset(&act,0,sizeof(act));
-    act.sa_flags = SA_SIGINFO|SA_RESTART;
-    act.sa_sigaction = sigfunc;
-    int ret = sigaction(SIGINT,&act,NULL);
-    ERROR_CHECK(ret,-1,"sigaction");
-    char buf[128] = {0};
-    ret = read(STDIN_FILENO,buf,sizeof(buf));
-    ERROR_CHECK(ret,-1,"read");
+
+void* thread_fun(void* arg) {
+    sleep(3);
+    int *pval = (int*)arg;
+    printf("*pval = %d\n", *pval);
+    return NULL;
+}
+
+
+int main(void){
+    int *pval = (int*)malloc(sizeof(int));
+    *pval = 666;
+
+    pthread_t tid;
+    int ret_create = pthread_create(&tid, NULL, thread_fun, pval);
+    THREAD_ERROR_CHECK(ret_create, "thread_create");
+    free(pval);
+    printf("Main. Free over.\n");
+
+    pthread_join(tid, NULL);
+    printf("Child over.\n");
     return 0;
+
 }

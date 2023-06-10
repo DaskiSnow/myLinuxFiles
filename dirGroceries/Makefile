@@ -3,13 +3,13 @@ SRCS := $(wildcard *.c)
 EXES := $(patsubst %.c, %, $(SRCS))
 
 CC := gcc
-CFLAGS := Wall -g
+CFLAGS := -Wall -g -lpthread
 .PHONY: out
 
 out: $(EXES)
 
 %: %.c
-	$(CC) $< -o $@ $(CFALGS)
+	$(CC) $< -o $@ $(CFLAGS)
 
 clean:
 	$(RM) $(EXES)
