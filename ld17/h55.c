@@ -5,11 +5,9 @@ void* threadFun(void* arg) {
     pthread_mutex_t *pmutex = (pthread_mutex_t*)arg;
     while(1){
         if(turn == 1){
-            pthread_mutex_lock(pmutex);
             printf("Before B!\n");
             sleep(3);
             printf("After B\n");
-            pthread_mutex_unlock(pmutex);
             turn = 0;
         }
     }
@@ -28,12 +26,10 @@ int main(int argc, char* argv[])
 
     while(1){
         if(turn == 0) {
-            pthread_mutex_lock(&mutex);
             printf("Before A!\n");
             sleep(3);
             printf("After A\n");
             turn = 1;
-            pthread_mutex_unlock(&mutex);
         }
     }
     return 0;
