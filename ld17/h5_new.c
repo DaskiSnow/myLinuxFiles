@@ -1,6 +1,6 @@
 #include <func.h>
 
-int turn = 0; // 实现轮流
+int turn = 0; // 实现轮流，也可以 结构体 = 锁 + turn
 void* threadFun(void* arg) {
     pthread_mutex_t *pmutex = (pthread_mutex_t*)arg;
     while(1){ // 轮询flag条件是否成立
