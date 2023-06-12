@@ -16,7 +16,7 @@ void* threadFun1(void* arg) {
     if(pshared->turn != 0) {
         pthread_cond_wait(&pshared->cond, &pshared->mutex);
     }
-    printf("A ");
+    printf("A\n"); // 业务比较短，可以在临界区中执行
     pshared->turn = 1;
     pthread_cond_signal(&pshared->cond);
     pthread_mutex_unlock(&pshared->mutex);
@@ -40,7 +40,7 @@ void* threadFun2(void* arg) {
     if(pshared->turn != 1) {
         pthread_cond_wait(&pshared->cond, &pshared->mutex);
     }
-    printf("B ");
+    printf("B\n");
     pshared->turn = 2;
     pthread_cond_signal(&pshared->cond);
     pthread_mutex_unlock(&pshared->mutex);
