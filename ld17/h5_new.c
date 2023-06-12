@@ -11,6 +11,10 @@ void* threadFun(void* arg) {
         } // flag成立
         break;
     }
+    pthread_mutex_lock(pmutex);
+    while(turn != 1) {
+        pthread_mutex_unlock(pmutex);
+    }
     // 临界区
     printf("Before B!\n");
     sleep(3);
