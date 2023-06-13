@@ -16,7 +16,7 @@ void* threadConsumer(void* arg) {
     shareRes_t *pshareRes = (shareRes_t *)arg;
     while(1){
         pthread_mutex_lock(&pshareRes->mutex);
-        while(pshareRes->storage <= 0) { // 货物告罄, 并通知Producer
+        while(pshareRes->storage <= 0) { // 货物告罄
             pthread_cond_wait(&pshareRes->cond, &pshareRes->mutex);
         }
         // 临界区
