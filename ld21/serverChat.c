@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
     // ./serverChat 127.0.0.1 16888
     ARGS_CHECK(argc, 3);
     
-    // 创建套接字，并初始化socket地址结构
+    // 创建监听套接字，并初始化socket地址结构
     int sfd = socket(AF_INET, SOCK_STREAM, 0);
     ERROR_CHECK(sfd, -1, "socket");
     struct sockaddr_in serAddr;
