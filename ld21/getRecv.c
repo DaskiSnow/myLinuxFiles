@@ -36,13 +36,19 @@ int main(int argc, char* argv[])
     ERROR_CHECK(send_ret, -1, "send");
 
     // 接收回复
-    char buf[10000] = {0};
-    ssize_t recv_ret;
-    recv_ret = recv(sfd, buf, sizeof(buf), 0);
-    ERROR_CHECK(recv_ret, -1, "recv");
-    
-    // 打印回复
-    printf("来自服务端的回复：\n%s\n", buf);
+    char buf[100000] = {0};
+    printf("服务端回复：\n");
+    while(1) {
+        memset(buf, 0, sizeof(buf));
+        ssize_t recv_ret;
+        recv_ret = recv(sfd, buf, sizeof(buf), 0);
+        ERROR_CHECK(recv_ret, -1, "recv");
+        // 打印回复
+        printf("%s", buf);
+    }
+
+    // 关闭套接字
+    close(sfd);
 
     return 0;
 }
