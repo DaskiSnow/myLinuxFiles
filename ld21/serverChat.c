@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
     // 全连接队列中取出一个连接accept
     socklen_t addrlen = sizeof(serAddr);
-    int nfd = accept(sfd, (struct sockaddr *)&serAddr, &addrlen);
+    int nfd = accept(sfd, NULL, NULL);
     ERROR_CHECK(nfd, -1, "accept");
 
     // select
