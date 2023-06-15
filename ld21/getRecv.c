@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(80);
-    addr.sin_addr.s_addr = inet_addr(str_ip); //test
+    addr.sin_addr.s_addr = inet_addr(str_ip); //实际上，应该使用memcpy来复制phost->h_addr_list[0]
 
     // 客户端发起连接
     int ret = connect(sfd, (struct sockaddr *)&addr, sizeof(addr));
