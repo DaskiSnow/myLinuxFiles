@@ -5,15 +5,6 @@ int main(int argc, char* argv[])
     // ./server ip port workerNum
     ARGS_CHECK(argc, 4);
 
-    // 总体结构：父进程(单线程), 子进程(主线程+N子线程)
-    int exitPipe[2];
-    if(fork()) {
-    
-    }
-    else {
-
-    }
-
     // 初始化核心数据结构threadPool
     threadPool_t threadPool;
     int workerNum = atoi(argv[3]);
