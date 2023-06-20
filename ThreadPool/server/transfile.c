@@ -81,7 +81,8 @@
 //}
 //版本5 大火车
 int transfile(int netfd){
-    sleep(30);
+    sleep(10);
+    printf("sleep over!\n");
     train_t train = {5,"file1"};
     send(netfd,&train,sizeof(int)+train.length,MSG_NOSIGNAL);//文件名
     int fd = open("file1",O_RDWR);

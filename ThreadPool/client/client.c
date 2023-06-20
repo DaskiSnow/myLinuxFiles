@@ -1,4 +1,4 @@
-#include <func.h>
+#include <50func.h>
 typedef struct train_s {
     int length;
     char data[1000];

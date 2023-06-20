@@ -8,12 +8,9 @@ int main(int argc, char* argv[])
     // 总体结构：父进程(单线程), 子进程(主线程+N子线程)
     int exitPipe[2];
     if(fork()) {
-    
+        
     }
-    else {
-
-    }
-
+    // 以下都是子进程(父进程不能达到)
     // 初始化核心数据结构threadPool
     threadPool_t threadPool;
     int workerNum = atoi(argv[3]);

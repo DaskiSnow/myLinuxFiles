@@ -1,6 +1,6 @@
 #ifndef __THREAD_POOL__
 #define __THREAD_POOL__
-#include <func.h>
+#include <50func.h>
 #include "taskQueue.h"
 typedef struct threadPool_s {
     pthread_t *tidArr;
