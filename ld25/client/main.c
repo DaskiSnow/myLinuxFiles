@@ -98,52 +98,9 @@ int readOp(opVar_t* pOpVar) {
 // for test
 int main(int argc, char* argv[])
 {
-    // ./client serIp serPort
-    int sfd = socket(AF_INET, SOCK_STREAM, 0);
-    ERROR_CHECK(sfd, -1, "socket");
-
-    struct sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(atoi(argv[2]));
-    addr.sin_addr.s_addr = inet_addr(argv[1]);
-    int ret = connect(sfd, (struct sockaddr *)&addr, sizeof(addr));
-    ERROR_CHECK(ret, -1, "connect");
-
-    // 创建epoll文件对象，并增加STDIN和的sfd监听
-    int epfd = epoll_create(1);    
-    epollAdd(epfd, STDIN_FILENO);
-    epollAdd(epfd, sfd);
-
-    // 开启监听
-    struct epoll_event evs[2];
-    while(1) {
-        int readyNum = epoll_wait(epfd, evs, SIZE(evs), -1);
-        for(int i = 0; i < readyNum; i++) {
-            if(evs[i].data.fd == STDIN_FILENO) { // 来自用户输入
-                opVar_t opVar;
-                initOpvar(&opVar);
-                readOp(&opVar);
-                printf("opInteger = %d, argv[0] = %s, argv[1] = %s\n", 
-                       opVar.op, opVar.argv[0], opVar.argv[1]);
-
-
-
-                destroyOpvar(&opVar);
-                // TODO: cd操作
-                // TODO: ls操作
-                // TODO: puts 将本地文件上传至服务器
-                // TODO: gets 文件名 下载服务器文件到本地
-                // TODO: remove 删除服务器上文件
-                // TODO: pwd 显示目前所在路径
-                // TODO: 其他命令...
-                // TODO: 无效命令不响应
-                // TODO: 关闭连接
-            }
-        }
-    }
-    close(sfd);
-
-    return 0;
+    opVar_t opVar;
+    initOpvar(&opVar);
+    readOp(&opVar);
 }
 //int main(int argc, char* argv[])
 //{
