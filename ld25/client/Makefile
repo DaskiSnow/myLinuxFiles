@@ -1,8 +1,8 @@
-SRCS := main.c
+SRCS := main.c epoll.c transfile.c
 OBJS := $(SRCS:%.c=%.o)
 
 client: $(OBJS)
-	gcc $^ -o $@ -Wall -lpthread
+	gcc $^ -o $@ -Wall -lpthread -lcrypt
 %.o: %.c
 	gcc -c $< -o $@ -g
 
