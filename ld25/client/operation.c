@@ -56,23 +56,16 @@ int readOp(opVar_t* pOpVar) {
     // 使用strtok_r切割buf，获取token
     char *token;
     char *saveptr; // 保存剩余串的指针
-    memset(pOpVar, 0, sizeof(opVar_t));
     token = strtok_r(buf, " ", &saveptr); // 获取操作token
     printf("op token = %s\n", token);
     if(opStrToInteger(token, &pOpVar->op) != 0){ // 转换成操作数
         return -1; // 输入的操作非法
     }
-    printf("op integer = %d\n", pOpVar->op);
     // 获取参数token
     int arg_index = 0;
     while(token != NULL) {
         token = strtok_r(NULL, " ", &saveptr); // 操作所需的参数
-        if(token[0] == '\0') {
-            printf("当前token第一个为空字符\n");
-            printf("Token: %s\n", token);
-        }
-        if(token[0] != '\0') {
-            printf("Token: %s\n", token);
+        if(token != NULL) {
             strcpy(pOpVar->argv[arg_index], token);
             arg_index++;
         }
