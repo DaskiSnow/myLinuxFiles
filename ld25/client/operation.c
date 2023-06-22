@@ -76,13 +76,13 @@ int readOp(opVar_t* pOpVar) {
         if(ptr && *ptr == '\n') *ptr = '\0';
     }
     while(token != NULL) {
-        arg_index++;
         strcpy(pOpVar->argv[arg_index], token); // 存储参数字符串
         token = strtok_r(NULL, " \n", &saveptr); 
         if(token != NULL) {
             ptr = strchr(token, '\n');  // 查找第一个换行符
             if(ptr && *ptr == '\n') *ptr = '\0';
         }
+        arg_index++;
     }
     pOpVar->argc = arg_index; // 参数个数
     // TODO:检查参数个数是否正确
