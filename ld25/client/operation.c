@@ -56,16 +56,32 @@ int readOp(opVar_t* pOpVar) {
     char *token;
     char *saveptr; // 保存剩余串的指针
     token = strtok_r(buf, " ", &saveptr); // 获取操作token
+
+    /*下面这段代码是为了避免token中包含换行符, 下同理*/
+    char* ptr = NULL;
+    if(token != NULL) {
+        ptr = strchr(token, '\n');  // 查找第一个换行符
+        if(ptr && *ptr == '\n') *ptr = '\0';
+    }
+    /*end*/
+
     if(opStrToInteger(token, &pOpVar->op) != 0){ // 转换成操作数
         return -1; // 输入的操作非法
     }
     // 获取参数token
     int arg_index = 0;
+    token = strtok_r(NULL, " \n", &saveptr); 
+    if(token != NULL) {
+        ptr = strchr(token, '\n');  // 查找第一个换行符
+        if(ptr && *ptr == '\n') *ptr = '\0';
+    }
     while(token != NULL) {
-        token = strtok_r(NULL, " ", &saveptr); 
+        arg_index++;
+        strcpy(pOpVar->argv[arg_index], token); // 存储参数字符串
+        token = strtok_r(NULL, " \n", &saveptr); 
         if(token != NULL) {
-            strcpy(pOpVar->argv[arg_index], token); // 存储参数字符串
-            arg_index++;
+            ptr = strchr(token, '\n');  // 查找第一个换行符
+            if(ptr && *ptr == '\n') *ptr = '\0';
         }
     }
     pOpVar->argc = arg_index; // 参数个数

@@ -38,7 +38,7 @@ int recvfile(int netfd) {
     while(1) {
         recvn(netfd, &length, sizeof(length));
         if(length == 0) { // 收到length=0的小火车，说明传送完毕
-            printf("收到退出信号火车头length = %d\n", length);
+            // printf("收到退出信号火车头length = %d\n", length);
             break;
         }
         memset(buf, 0, sizeof(buf));
