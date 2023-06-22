@@ -10,6 +10,7 @@ void getSalt(char* salt, char* cryptPasswd) {
 }
 
 // 服务端的用户的验证
+// 输入用户名和明文密码，返回0-失败 1-成功
 int justify(const char* username, const char* password) {
     struct spwd* sp;
     char salt[512] = {0};
@@ -31,11 +32,12 @@ int justify(const char* username, const char* password) {
     }
 }
 
-int main(int argc, char* argv[])
-{
-    // ./crypt username passwd
-    int ret = justify(argv[1], argv[2]);
-    printf("ret = %d\n", ret);
-    return 0;
-}
-
+//test
+//int main(int argc, char* argv[])
+//{
+//    // ./crypt username passwd
+//    int ret = justify(argv[1], argv[2]);
+//    printf("ret = %d\n", ret);
+//    return 0;
+//}
+//
