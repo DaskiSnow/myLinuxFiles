@@ -8,13 +8,21 @@ int makeWorker(threadPool_t* pthreadPool) {
 }
 
 void* threadFunc(void* arg) {
-    threadPool_t *pthreadPool = (threadPool_t *)arg;
+    threadPool_t *pthreadPool = (threadPool_t *)arg; 
+    
+    // 获取所属进程的工作目录
+    char realPath[1024] = {0};
+    getcwd(realPath, sizeof(realPath));
+    char path[2048] = {0};
+    getcwd(path, sizeof(path));
+
     while(1) {
         // 取任务
         pthread_mutex_lock(&pthreadPool->taskQueue.mutex);
         while(pthreadPool->exitFlag == 0 && pthreadPool->taskQueue.queueSize <= 0) {
             pthread_cond_wait(&pthreadPool->taskQueue.cond, &pthreadPool->taskQueue.mutex);
         }
+
         // 检测到关闭标志
         if(pthreadPool->exitFlag != 0) {
             printf("A child thread is going to exit!\n");
@@ -26,13 +34,35 @@ void* threadFunc(void* arg) {
         deQueue(&pthreadPool->taskQueue);
         pthread_mutex_unlock(&pthreadPool->taskQueue.mutex);
 
+        while(1) { // TODO:封装成函数，并解决客户端退出问题
+            // 接收登录信息，返回鉴权结果
+            char username[1024] = {0};
+            char passwd[1024] = {0};
+            int length;
+            recvn(netfd, &length, sizeof(int));
+            recvn(netfd, username, length);
+            recvn(netfd, &length, sizeof(int));
+            recvn(netfd, passwd, length);
+            printf("username=%s,passwd=%sW\n", username, passwd);
+            int is_authenticated = justify(username, passwd); // 0-失败 1-成功
+            send(netfd, &is_authenticated, sizeof(int), MSG_NOSIGNAL);
+            if(is_authenticated == 0) { // 鉴权失败，关闭链接
+                printf("有一个用户鉴权失败\n");
+                continue; // 鉴权失败
+            }
+            else { // 鉴权成功
+                printf("有一个用户鉴权成功\n");
+                break;
+            }
+        }
+
         // 不断处理某个Client的请求，直至该客户端关闭连接
         while(1) {
             // 获取Client发来的命令
             opVar_t opVar;
             initOpVar(&opVar);
             int rret = recvcmd(netfd, &opVar);
-             printf("op = %d ; argc = %d ; argv[0] = %s ; argv[1] = %s\n",
+            printf("op = %d ; argc = %d ; argv[0] = %s ; argv[1] = %s\n",
                    opVar.op, opVar.argc, opVar.argv[0], opVar.argv[1]);
             if(rret == -1) {
                 printf("一个客户端粗暴退出\n");
@@ -48,28 +78,32 @@ void* threadFunc(void* arg) {
                 break;
             }
             else if(opVar.op == CD) {
-                
+                // TODO: 执行cd函数，改变path    
             }
             else if(opVar.op == LS) {
+                // TODO: 执行ls函数，遍历并打印当前目录下的文件(不包含.开头的文件)    
 
             }
             else if(opVar.op == PUTS) {
+                // TODO: 执行recvFile函数，接收来自客户端的文件
 
             }
             else if(opVar.op == GETS) {
+                // TODO: 执行transfile(netfd, filepath)函数, 发送对应文件
+                // 传输文件
+                transfile(netfd);
+                printf("传送完一个文件\n");
 
             }
             else if(opVar.op == REMOVE) {
-
+                // TODO: 执行rmFile(filepath)，删除用户目前所处目录下的某个文件
             }
             else if(opVar.op == PWD) {
+                // TODO: 显示用户所处目录路径
 
             }
 
             // TODO:cd、ls ...操作，返回字符串
-            // 传输文件
-            transfile(netfd);
-            printf("传送完一个文件\n");
             // 恢复空闲
 
         }

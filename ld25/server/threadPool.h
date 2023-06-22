@@ -33,6 +33,7 @@ enum {
     GETS,
     REMOVE,
     PWD,
+    MKDIR,
     QUIT
 };
 
@@ -54,6 +55,7 @@ int recvn(int netfd, void* buf, int length);
 void initOpVar(opVar_t *pOpvar);
 void destroyOpVar(opVar_t *pOpvar);
 int recvcmd(int netfd, opVar_t* opVar);
+int justify(const char* username, const char* password);
 
 #endif
 

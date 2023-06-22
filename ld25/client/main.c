@@ -19,6 +19,36 @@ int main(int argc, char* argv[])
     epollAdd(epfd, STDIN_FILENO);
     epollAdd(epfd, sfd);
 
+    int is_authenticated = 0;
+    while(is_authenticated == 0) { // TODO: 封装成函数，并解决退出问题
+        // 用户登录
+        char username[1024] = {0};
+        char passwd[1024] = {0};
+        printf("输入用户名:");
+        fflush(stdout);
+        read(STDIN_FILENO, username, sizeof(username));
+        username[strlen(username)-1] = '\0';
+        printf("输入密码:");
+        fflush(stdout);
+        read(STDIN_FILENO, passwd, sizeof(passwd));
+        passwd[strlen(passwd)-1] = '\0';
+        // 发送登录信息(逻辑上小火车发送)
+        int length = strlen(username);
+        send(sfd, &length, sizeof(int), MSG_NOSIGNAL);
+        send(sfd, username, strlen(username), MSG_NOSIGNAL);
+        length = strlen(passwd);
+        send(sfd, &length, sizeof(int), MSG_NOSIGNAL);
+        send(sfd, passwd, strlen(passwd), MSG_NOSIGNAL); // TODO: 目前明文传输，后续密文传输
+        // 等待接收鉴权结果
+        printf("正在登录...\n");
+        recvn(sfd, &is_authenticated, sizeof(int));
+        if(is_authenticated != 0) { // 鉴权成功
+            printf("登录成功!\n");
+            break;
+        }
+
+    }
+
     // 开启监听
     struct epoll_event evs[2];
     int exitFlag = 0;

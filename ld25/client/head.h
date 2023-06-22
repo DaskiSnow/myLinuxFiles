@@ -12,7 +12,8 @@ enum {
     REMOVE,
     PWD,
     MKDIR,
-    QUIT
+    QUIT,
+    LOGIN
 };
 
 typedef struct opVar_s {
@@ -30,3 +31,4 @@ void destroyOpvar(opVar_t *pOpvar);
 int readOp(opVar_t* pOpVar);
 int opStrToInteger(char* opStr, int* res);
 int sendcmd(int netfd, opVar_t opVar);
+int login(const char* username, const char* passwd);

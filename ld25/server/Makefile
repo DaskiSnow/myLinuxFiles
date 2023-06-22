@@ -1,7 +1,7 @@
-SRCS := main.c worker.c tcpInit.c epoll.c transfile.c taskQueue.c threadPool.c
+SRCS := main.c worker.c tcpInit.c epoll.c transfile.c taskQueue.c threadPool.c login.c
 OBJS := $(SRCS:%.c=%.o)
 server:$(OBJS)
-	gcc $^ -o $@ -lpthread
+	gcc $^ -o $@ -lpthread -lcrypt
 %.o:%.c
 	gcc -c $^ -o $@ -g
 clean:
