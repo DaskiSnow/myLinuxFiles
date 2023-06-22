@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
     struct epoll_event evs[2];
     while(1) {
         int readyNum = epoll_wait(epfd, evs, SIZE(evs), -1);
+        printf("readyNum = %d\n", readyNum);
         for(int i = 0; i < readyNum; i++) {
             if(evs[i].data.fd == STDIN_FILENO) { // 来自用户输入
                 // 读取命令
@@ -29,10 +30,10 @@ int main(int argc, char* argv[])
                 initOpvar(&opVar);
                 readOp(&opVar);
 
-                // 通过小火车发送命令给服务端
-                train_t train;
-                train.length = sizeof(opVar);
-                memcpy(train.data, &opVar, sizeof(opVar));
+                // 通过发送命令给服务端(逻辑上的小火车)
+                printf("ready to send\n");
+                sendcmd(sfd, opVar);
+                printf("over send\n");
             }
             else if(evs[i].data.fd == sfd) { // 来自服务端的回复或传输内容
                 // TODO: 服务端返回操作后的字符串，客户端打印

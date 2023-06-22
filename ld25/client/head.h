@@ -16,6 +16,7 @@ enum {
 
 typedef struct opVar_s {
     int op;         // 操作
+    int argc;       // 参数个数
     char* argv[10]; // 参数token集合, 需要预先分配空间
 } opVar_t;
 
@@ -27,3 +28,4 @@ void initOpvar(opVar_t *pOpvar);
 void destroyOpvar(opVar_t *pOpvar);
 int readOp(opVar_t* pOpVar);
 int opStrToInteger(char* opStr, int* res);
+int sendcmd(int netfd, opVar_t opVar);

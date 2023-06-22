@@ -51,32 +51,47 @@ int readOp(opVar_t* pOpVar) {
     char buf[1024] = {0}; // 存储用户输入的内容
     int rret = read(STDIN_FILENO, buf, sizeof(buf));
     ERROR_CHECK(rret, -1, "read STDIN_FILENO");
-    printf("buf = %s\n", buf);
 
     // 使用strtok_r切割buf，获取token
     char *token;
     char *saveptr; // 保存剩余串的指针
     token = strtok_r(buf, " ", &saveptr); // 获取操作token
-    printf("op token = %s\n", token);
     if(opStrToInteger(token, &pOpVar->op) != 0){ // 转换成操作数
         return -1; // 输入的操作非法
     }
     // 获取参数token
     int arg_index = 0;
     while(token != NULL) {
-        token = strtok_r(NULL, " ", &saveptr); // 操作所需的参数
+        token = strtok_r(NULL, " ", &saveptr); 
         if(token != NULL) {
-            strcpy(pOpVar->argv[arg_index], token);
+            strcpy(pOpVar->argv[arg_index], token); // 存储参数字符串
             arg_index++;
         }
     }
+    pOpVar->argc = arg_index; // 参数个数
     // TODO:检查参数个数是否正确
     return 0;
 }
+
+// 发送命令
+int sendcmd(int netfd, opVar_t opVar) {
+    send(netfd, &opVar.op, sizeof(int), MSG_NOSIGNAL);
+    send(netfd, &opVar.argc, sizeof(int), MSG_NOSIGNAL);
+    for(int i = 0; i < opVar.argc; i++) {
+        send(netfd, opVar.argv[i], 128, MSG_NOSIGNAL);
+    }
+    return 0;
+}
+
 // for test
 //int main(int argc, char* argv[])
 //{
 //    opVar_t opVar;
 //    initOpvar(&opVar);
-//    readOp(&opVar);
+//    int ret = readOp(&opVar);
+//    if(ret == -1) {
+//        printf("传入的命令非法\n");
+//    }
+//    printf("opVar.op = %d; opVar.argc = %d ; argv[0] = %s; argv[1] = %s\n", 
+//           opVar.op, opVar.argc,opVar.argv[0], opVar.argv[1]);
 //}
