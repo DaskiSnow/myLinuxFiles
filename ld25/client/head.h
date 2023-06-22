@@ -4,7 +4,26 @@ typedef struct train_s {
     char data[10000];
 } train_t;
 
+enum {
+    CD,
+    LS,
+    PUTS,
+    GETS,
+    REMOVE,
+    PWD,
+    QUIT
+};
+
+typedef struct opVar_s {
+    int op;         // 操作
+    char* argv[10]; // 参数token集合, 需要预先分配空间
+} opVar_t;
+
 int recvn(int netfd, void* buf, int length);
 int recvfile(int netfd); 
 int epollAdd(int epfd, int fd);
 int epollDel(int epfd, int fd);
+void initOpvar(opVar_t *pOpvar);
+void destroyOpvar(opVar_t *pOpvar);
+int readOp(opVar_t* pOpVar);
+int opStrToInteger(char* opStr, int* res);
