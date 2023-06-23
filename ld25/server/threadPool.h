@@ -2,13 +2,21 @@
 #define __THREAD_POOL__
 #include <func.h>
 #include "taskQueue.h"
-#define NETDISK_LOG_DEBUG(retval, val, msg){   \
-    if(retval == val){                         \
-    printf("%s:%s\n",msg,strerror(errno));     \
-    printf("file = %s\n", __FILE__);           \
-    printf("func = %s\n", __FUNCTION__);       \
-    printf("line = %d\n", __LINE__);           \
-    }                                          \
+
+#define NETDISK_LOG_INFO(msg){                       \
+    syslog(LOG_INFO,"%s is successed\n",msg);        \
+    syslog(LOG_INFO,"file =%s\n",__FILE__);          \
+    syslog(LOG_INFO,"func =%s\n",__FUNCTION__);      \
+    syslog(LOG_INFO,"line =%d\n",__LINE__);          \
+}
+
+#define NETDISK_LOG_DEBUG(retval, val, msg){           \
+    if(retval == val){                                 \
+    syslog(LOG_ERR,"%s:%s\n",msg,strerror(errno));     \
+    syslog(LOG_ERR,"file = %s\n", __FILE__);           \
+    syslog(LOG_ERR,"func = %s\n", __FUNCTION__);       \
+    syslog(LOG_ERR,"line = %d\n", __LINE__);           \
+    }                                                  \
 }
 
 // 存储子线程信息(主线程除外)
@@ -56,7 +64,7 @@ void initOpVar(opVar_t *pOpvar);
 void destroyOpVar(opVar_t *pOpvar);
 int recvcmd(int netfd, opVar_t* opVar);
 int justify(const char* username, const char* password);
-
+int authenticate(int netfd, char* username, char* passwd);
 #endif
 
 

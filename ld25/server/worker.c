@@ -34,26 +34,13 @@ void* threadFunc(void* arg) {
         deQueue(&pthreadPool->taskQueue);
         pthread_mutex_unlock(&pthreadPool->taskQueue.mutex);
 
-        while(1) { // TODO:封装成函数，并解决客户端退出问题
-            // 接收登录信息，返回鉴权结果
-            char username[1024] = {0};
-            char passwd[1024] = {0};
-            int length;
-            recvn(netfd, &length, sizeof(int));
-            recvn(netfd, username, length);
-            recvn(netfd, &length, sizeof(int));
-            recvn(netfd, passwd, length);
-            printf("username=%s,passwd=%sW\n", username, passwd);
-            int is_authenticated = justify(username, passwd); // 0-失败 1-成功
-            send(netfd, &is_authenticated, sizeof(int), MSG_NOSIGNAL);
-            if(is_authenticated == 0) { // 鉴权失败，关闭链接
-                printf("有一个用户鉴权失败\n");
-                continue; // 鉴权失败
-            }
-            else { // 鉴权成功
-                printf("有一个用户鉴权成功\n");
-                break;
-            }
+        char username[1024] = {0};
+        char passwd[1024] = {0};
+        int ret_authen = authenticate(netfd, username, passwd); //登录成功返回0, 错误三次返回1
+        if(ret_authen == -1) {
+            printf("用户[%s]鉴权失败，断开连接！\n", username);
+            close(netfd);
+            continue;
         }
 
         // 不断处理某个Client的请求，直至该客户端关闭连接

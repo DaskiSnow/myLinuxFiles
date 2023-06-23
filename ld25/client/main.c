@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
     int is_authenticated = 0;
     while(is_authenticated == 0) { // TODO: 封装成函数，并解决退出问题
         // 用户登录
+        int wrongCount = 0; // 登录出错次数
         char username[1024] = {0};
         char passwd[1024] = {0};
         printf("输入用户名:");
@@ -46,7 +47,11 @@ int main(int argc, char* argv[])
             printf("登录成功!\n");
             break;
         }
-
+        wrongCount++;
+        if(wrongCount == 3) {
+            printf("错误3次，已关闭客户端！\n");
+            return 0;
+        }
     }
 
     // 开启监听

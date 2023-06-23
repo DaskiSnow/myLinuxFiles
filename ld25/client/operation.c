@@ -39,6 +39,9 @@ int opStrToInteger(char* opStr, int* res) {
     else if(strcmp(opStr, "quit") == 0) {
         *res = QUIT;
     }
+    else if(strcmp(opStr, "mkdir") == 0) {
+        *res = MKDIR;
+    }
     else { // 输入不合法
         return -1; // 执行失败
     }
