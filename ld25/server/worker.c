@@ -36,7 +36,7 @@ void* threadFunc(void* arg) {
 
         char username[1024] = {0};
         char passwd[1024] = {0};
-        int ret_authen = authenticate(netfd, username, passwd); //登录成功返回0, 错误三次返回1
+        int ret_authen = authenticate(netfd, username, sizeof(username) ,passwd, sizeof(passwd)); //登录成功返回0, 错误三次返回1
         if(ret_authen == -1) {
             printf("用户[%s]鉴权失败，断开连接！\n", username);
             close(netfd);

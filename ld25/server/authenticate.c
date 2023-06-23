@@ -32,11 +32,13 @@ int justify(const char* username, const char* password) {
 
 // 功能：接收用户名和密码，并返回验证结果
 // 返回值：-1-失败 0-成功
-int authenticate(int netfd, char* username, char* passwd) {
+int authenticate(int netfd, char* username, int len1, char* passwd, int len2) {
     int wrongCount = 0; // 记录用户错误次数，三次错误则返回-1
     while(1) { 
         // 接收登录信息，返回鉴权结果
         int length;
+        memset(username, 0, len1);
+        memset(passwd, 0, len2);
         recvn(netfd, &length, sizeof(int));
         recvn(netfd, username, length);
         recvn(netfd, &length, sizeof(int));

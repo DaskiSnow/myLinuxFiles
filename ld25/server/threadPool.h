@@ -64,7 +64,7 @@ void initOpVar(opVar_t *pOpvar);
 void destroyOpVar(opVar_t *pOpvar);
 int recvcmd(int netfd, opVar_t* opVar);
 int justify(const char* username, const char* password);
-int authenticate(int netfd, char* username, char* passwd);
+int authenticate(int netfd, char* username, int len1, char* passwd, int len2);
 #endif
 
 
