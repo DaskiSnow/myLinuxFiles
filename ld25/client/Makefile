@@ -1,4 +1,4 @@
-SRCS := main.c epoll.c transfile.c operation.c
+SRCS := main.c epoll.c transfile.c operation.c login.c
 OBJS := $(SRCS:%.c=%.o)
 
 client: $(OBJS)

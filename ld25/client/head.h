@@ -31,4 +31,4 @@ void destroyOpvar(opVar_t *pOpvar);
 int readOp(opVar_t* pOpVar);
 int opStrToInteger(char* opStr, int* res);
 int sendcmd(int netfd, opVar_t opVar);
-int login(const char* username, const char* passwd);
+int login(int sfd, char* username, int len1, char* passwd, int len2);

@@ -19,39 +19,13 @@ int main(int argc, char* argv[])
     epollAdd(epfd, STDIN_FILENO);
     epollAdd(epfd, sfd);
 
-    int is_authenticated = 0;
-    while(is_authenticated == 0) { // TODO: 封装成函数，并解决退出问题
-        // 用户登录
-        int wrongCount = 0; // 登录出错次数
-        char username[1024] = {0};
-        char passwd[1024] = {0};
-        printf("输入用户名:");
-        fflush(stdout);
-        read(STDIN_FILENO, username, sizeof(username));
-        username[strlen(username)-1] = '\0';
-        printf("输入密码:");
-        fflush(stdout);
-        read(STDIN_FILENO, passwd, sizeof(passwd));
-        passwd[strlen(passwd)-1] = '\0';
-        // 发送登录信息(逻辑上小火车发送)
-        int length = strlen(username);
-        send(sfd, &length, sizeof(int), MSG_NOSIGNAL);
-        send(sfd, username, strlen(username), MSG_NOSIGNAL);
-        length = strlen(passwd);
-        send(sfd, &length, sizeof(int), MSG_NOSIGNAL);
-        send(sfd, passwd, strlen(passwd), MSG_NOSIGNAL); // TODO: 目前明文传输，后续密文传输
-        // 等待接收鉴权结果
-        printf("正在登录...\n");
-        recvn(sfd, &is_authenticated, sizeof(int));
-        if(is_authenticated != 0) { // 鉴权成功
-            printf("登录成功!\n");
-            break;
-        }
-        wrongCount++;
-        if(wrongCount == 3) {
-            printf("错误3次，已关闭客户端！\n");
-            return 0;
-        }
+    char username[1024];
+    char passwd[1024];
+    ret = login(sfd, username,sizeof(username), passwd, sizeof(passwd));
+    printf("username:%s,passwd:%s\n",username,passwd);
+    if(ret == -1) {
+        printf("登录失败！\n");
+        return 0;
     }
 
     // 开启监听
