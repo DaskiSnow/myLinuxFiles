@@ -4,7 +4,7 @@ int recvn(int netfd, void* buf, int length) {
     int total = 0;
     char *p = (char *)buf;
     while(total < length) {
-        int ret = recv(netfd, p, length-total, 0);
+        int ret = recv(netfd, p+total, length-total, 0);
         if(ret == 0) {
             return -1;
         }
