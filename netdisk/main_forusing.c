@@ -40,7 +40,7 @@ int signup(MYSQL* db, const char* username, const char* passwd) {
     return 0;
 }
 
-// 功能：登录，并返回一个token
+// 功能：登录，并返回一个token(已测试)
 // 返回值：-1失败，0成功
 int login(MYSQL* db, const char* username, const char* passwd, char* token) {
     char sql[1024] = {0};
@@ -78,7 +78,7 @@ int login(MYSQL* db, const char* username, const char* passwd, char* token) {
 
 }
 
-// 功能：服务器生成token(只用于该源文件)
+// 功能：服务器生成token(只用于该源文件)(已测试)
 // 返回值：0成功，-1失败
 int tkmake(const char* username, char* retToken) {
     char* jwt;
@@ -119,7 +119,7 @@ int tkmake(const char* username, char* retToken) {
     return 0; // encoding successful
 }
 
-// 验证token
+// 功能：验证token(已测试)
 // 返回值：0成功 -1失败
 int tkcheck(const char* username, const char* token) {
     char* KEY = "Content only known by Daskisnow's server! Prevent leaking this content!";
@@ -169,7 +169,7 @@ int tkcheck(const char* username, const char* token) {
 
 }
 
-// 功能：随机生成生成salt，并结合passwd生成cryptpasswd(只用于该源文件)
+// 功能：随机生成生成salt，并结合passwd生成cryptpasswd(只用于该源文件)(已测试)
 // 注意点：salt的长度至少为12, 即salt[12];cryptpasswd长度至少为99, 即cryptpasswd[99]
 int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd) {
     // 随机生成类型为$6$的salt
