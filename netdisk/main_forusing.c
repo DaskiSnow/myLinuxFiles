@@ -1,12 +1,14 @@
 #include <func.h>
-int tkmake(const char* username, char* retToken);
-int tkcheck(const char* username, const char* token);
 int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd);
+int signup(MYSQL* db, const char* username, const char* passwd);
+int login(MYSQL* db, const char* username, const char* passwd, char* token);
+int tkcheck(const char* username, const char* token);
+int tkmake(const char* username, char* retToken);
+
+
+
 // 功能：注册(已测试)
-// 步骤：
-// 1、数据库查询username，结果为!=NULL则拒绝注册；
-// 2、为NULL则随机生成一个salt，并crypt_r(salt,passwd,...),并将用户信息存入数据库
-// 返回值：-1失败，0成功
+// 返回值：-1注册失败，-2注册成功添加用户目录失败，0成功
 int signup(MYSQL* db, const char* username, const char* passwd) {
     char sql[1024] = {0};
     char salt[12] = {0};    
@@ -22,14 +24,20 @@ int signup(MYSQL* db, const char* username, const char* passwd) {
         // printf("Error: %s\n", mysql_error(db));
         return -1;
     }
+
+    // 成功注册，虚拟文件系统创建该用户的目录
+    memset(sql, 0, sizeof(sql));
+    sprintf(sql, "insert into tbl_file (u_name, f_name, type, pre_id, path, isdelete) values ('%s','%s','%s', %d, '%s', %d)", username, username, "d", -1, "/", 0);
+    qret = mysql_query(db, sql);
+    if(qret != 0) {
+        // printf("Error: %s\n", mysql_error(db));
+        return -2;
+    }
+    
     return 0;
 }
 
 // 功能：登录，并返回一个token
-// 步骤：
-// 1、数据库查询username，若查询结果为NULL则返回-1
-// 2、若!=NULL，获取salt和cryptpasswd，
-// 3、将crypt_r(salt, passwd)和 cryptpasswd 执行 strcmp()
 // 返回值：-1失败，0成功
 int login(MYSQL* db, const char* username, const char* passwd, char* token) {
     char sql[1024] = {0};
@@ -67,32 +75,7 @@ int login(MYSQL* db, const char* username, const char* passwd, char* token) {
 
 }
 
-// 测试用代码：测试login()
-int main(int argc, char* argv[]) {
-    ARGS_CHECK(argc, 3);
-    MYSQL* db = mysql_init(NULL);
-    char* host = "localhost";
-    char* user = "root";
-    char* passwd = "1688";
-    char* database = "netdisk";
-    MYSQL* ret = mysql_real_connect(db, host, user, passwd, database, 0, NULL, 0); 
-    if(ret == NULL) {
-        printf("Error: %s\n", mysql_error(db));
-        return -1;
-    }
-    char retToken[1024] = {0};
-    int ret_login = login(db, argv[1], argv[2], retToken);
-    if(ret_login == 0) {
-        printf("login successful!\n");
-        printf("retToken=%s\n", retToken);
-    }
-    else {
-        printf("login falid!\n");
-    }
-    return 0;
-}
-
-// 功能：服务器生成token
+// 功能：服务器生成token(只用于该源文件)
 // 返回值：0成功，-1失败
 int tkmake(const char* username, char* retToken) {
     char* jwt;
@@ -183,29 +166,7 @@ int tkcheck(const char* username, const char* token) {
 
 }
 
-int main_signup(int argc, char* argv[]) {
-    ARGS_CHECK(argc, 3);
-    MYSQL* db = mysql_init(NULL);
-    char* host = "localhost";
-    char* user = "root";
-    char* passwd = "1688";
-    char* database = "netdisk";
-    MYSQL* ret = mysql_real_connect(db, host, user, passwd, database, 0, NULL, 0); 
-    if(ret == NULL) {
-        printf("Error: %s\n", mysql_error(db));
-        return -1;
-    }
-    int signup_ret = signup(db, argv[1], argv[2]);
-    if(signup_ret == -1) {
-        printf("注册失败,重复用户\n");
-    }
-    else{
-        printf("注册成功\n");
-    }
-    return 0;
-}
-
-// 功能：随机生成生成salt，并结合passwd生成cryptpasswd
+// 功能：随机生成生成salt，并结合passwd生成cryptpasswd(只用于该源文件)
 // 注意点：salt的长度至少为12, 即salt[12];cryptpasswd长度至少为99, 即cryptpasswd[99]
 int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd) {
     // 随机生成类型为$6$的salt
@@ -229,69 +190,29 @@ int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd) {
 
     return 0;
 }
-
-// 生成salt，以及通过salt和passwd验证cryptpasswd
-int main2() {
-    char salt[12];
-    const char *const seedchars =
-        "./0123456789ABCDEFGHIJKLMNOPQRST"
-        "UVWXYZabcdefghijklmnopqrstuvwxyz";
-    srand(time(NULL) + getpid());
-
-    for (int i = 0; i < 11; i++) {
-        salt[i] = seedchars[rand() % 64];
-    }
-    salt[11] = '\0';
-    salt[0] = '$';
-    salt[1] = '6';
-    salt[2] = '$';
-    printf("Generated salt: %s\n", salt);
-
-
-    char* passwd = "1688";
-    struct crypt_data cryptData2;
-    char* hash = crypt_r(passwd, salt, &cryptData2);
-    printf("hash:%s\n", hash);
-    printf("crypt_3_buf:%s\n", cryptData2.crypt_3_buf);
-    printf("current_salt:%s\n", cryptData2.current_salt);
-    printf("direction:%d\n", cryptData2.direction);
-    printf("initialized:%d\n", cryptData2.initialized);
-    printf("keysched:%s\n", cryptData2.keysched);
-    return 0;
-}
-
-// MySQL 连接测试
-int main1(int argc, char* argv[])
-{
-    MYSQL* db = mysql_init(NULL);
-    char* host = "localhost";
-    char* user = "root";
-    char* passwd = "1688";
-    char* database = "netdisk";
-    MYSQL* ret = mysql_real_connect(db, host, user, passwd, database, 0, NULL, 0); 
-    if(ret == NULL) {
-        printf("Error: %s\n", mysql_error(db));
-        return -1;
-    }
-    char* sql = "select * from user_table";
-    int qret = mysql_query(db, sql);
-    if(qret != 0) {
-        printf("Error: %s\n", mysql_error(db));
-        return -1;
-    }
-    MYSQL_RES* res = mysql_store_result(db);
-    printf("total row: %llu\n", mysql_num_rows(res));
-    printf("total column: %u\n", mysql_num_fields(res));
-    MYSQL_ROW row;
-    while((row = mysql_fetch_row(res)) != NULL) {
-        for(unsigned int i = 0; i < mysql_num_fields(res); i++) {
-            printf("%s\t", row[i]);
-        }
-        printf("\n");
-    }
-    mysql_free_result(res);
-    mysql_close(db);
-
-    return 0;
-}
-
+// 测试用代码
+//int main(int argc, char* argv[]) {
+//    ARGS_CHECK(argc, 3);
+//    MYSQL* db = mysql_init(NULL);
+//    char* host = "localhost";
+//    char* user = "root";
+//    char* passwd = "1688";
+//    char* database = "netdisk";
+//    MYSQL* ret = mysql_real_connect(db, host, user, passwd, database, 0, NULL, 0); 
+//    if(ret == NULL) {
+//        printf("Error: %s\n", mysql_error(db));
+//        return -1;
+//    }
+//    int signup_ret = signup(db, argv[1], argv[2]);
+//    if(signup_ret == -1) {
+//        printf("注册失败,重复用户\n");
+//    }
+//    else if(signup_ret == -2) {
+//        printf("注册成功，但建立用户目录失败!\n");
+//    }
+//    else{
+//        printf("注册成功\n");
+//    }
+//    return 0;
+//   
+//}

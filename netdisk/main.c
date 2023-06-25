@@ -2,8 +2,8 @@
 int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd);
 int signup(MYSQL* db, const char* username, const char* passwd);
 int login(MYSQL* db, const char* username, const char* passwd, char* token);
-int tkmake(const char* username, char* retToken);
 int tkcheck(const char* username, const char* token);
+int tkmake(const char* username, char* retToken);
 
 
 
