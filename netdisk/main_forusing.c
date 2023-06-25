@@ -1,4 +1,7 @@
 #include <func.h>
+// 使用前提：
+// 需要增加头文件 <l8w8jwt/encode.h>  <l8w8jwt/encode.h>
+// 需要链接动态库 -ll8w8jwt
 int getSaltCryptpasswd(const char* passwd, char* salt, char* cryptpasswd);
 int signup(MYSQL* db, const char* username, const char* passwd);
 int login(MYSQL* db, const char* username, const char* passwd, char* token);
