@@ -21,6 +21,7 @@ int justify(const char* username, const char* password) {
 
     getSalt(salt, sp->sp_pwdp);
 
+    printf("cryptPasswd:%s",crypt(password, salt));
     // 验证
     if(strcmp(sp->sp_pwdp, crypt(password, salt)) == 0) {
         return 1; // 返回1代表正确
