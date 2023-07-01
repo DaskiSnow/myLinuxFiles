@@ -23,9 +23,12 @@
 typedef struct threadPool_s { 
     pthread_t* tidArr;      // 子线程tid
     int workerNum;          // 子线程数目
-    taskQueue_t taskQueue;  // 任务队列
+    taskQueue_t lkQueue;    // 长连接队列(long linked)
+    taskQueue_t slQueue;    // 短连接队列(short linked)
     int exitFlag;           // 退出标志位
+    MYSQL* db;              // MySQL连接句柄
 } threadPool_t;
+
 
 // 小火车
 typedef struct train_s { 
@@ -72,5 +75,8 @@ int signup(MYSQL* db, const char* username, const char* passwd);
 int login(MYSQL* db, const char* username, const char* passwd, char* token);
 int tkcheck(const char* username, const char* token);
 int tkmake(const char* username, char* retToken);
+
+// 数据库相关
+MYSQL* dbInit(const char* host, const char* user, const char* passwd, const char* database);
 
 #endif
