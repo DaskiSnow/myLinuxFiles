@@ -6,7 +6,7 @@ class Singleton {
 public:
     static Singleton * getInstance() {
         if(_pInstance == nullptr) { 
-            _pInstance = new Singleton();
+            _pInstance = new Singleton;
         }
         return _pInstance;
     }
