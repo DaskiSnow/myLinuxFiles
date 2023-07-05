@@ -1,0 +1,4 @@
+17:19:37,05 SnowCategory [INFO]  Mylogger.cc:test1:141  The log is info message
+17:19:37,05 SnowCategory [ERROR]  Mylogger.cc:test1:142  The log is error message
+17:19:37,05 SnowCategory [WARN]  Mylogger.cc:test1:143  The log is warn message
+17:19:37,05 SnowCategory [DEBUG]  Mylogger.cc:test1:144  The log is debug message

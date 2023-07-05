@@ -1,0 +1,19 @@
+16:42:13,04 SnowCategory [INFO] The log is info message
+16:42:13,04 SnowCategory [ERROR] The log is error message
+16:42:13,04 SnowCategory [FATAL] The log is fatal message
+16:42:13,04 SnowCategory [CRIT] The log is crit message
+17:04:20,05 SnowCategory [INFO]  Mylogger.cc:main:130 write a info message
+17:04:44,05 SnowCategory [INFO]  Mylogger.cc:main:130 write a info message 
+17:05:03,05 SnowCategory [INFO]  Mylogger.cc:main:130  write a info message
+17:13:46,05 SnowCategory [INFO]  Mylogger.cc:test1:141  The log is info message
+17:13:46,05 SnowCategory [ERROR]  Mylogger.cc:test1:142  The log is error message
+17:13:46,05 SnowCategory [WARN]  Mylogger.cc:test1:143  The log is warn message
+17:13:46,05 SnowCategory [DEBUG]  Mylogger.cc:test1:144  The log is debug message
+17:15:12,05 SnowCategory [INFO]  Mylogger.cc:test1:141  The log is info message
+17:15:12,05 SnowCategory [ERROR]  Mylogger.cc:test1:142  The log is error message
+17:15:12,05 SnowCategory [WARN]  Mylogger.cc:test1:143  The log is warn message
+17:15:12,05 SnowCategory [DEBUG]  Mylogger.cc:test1:144  The log is debug message
+17:15:23,05 SnowCategory [INFO]  Mylogger.cc:test1:141  The log is info message
+17:15:23,05 SnowCategory [ERROR]  Mylogger.cc:test1:142  The log is error message
+17:15:23,05 SnowCategory [WARN]  Mylogger.cc:test1:143  The log is warn message
+17:15:23,05 SnowCategory [DEBUG]  Mylogger.cc:test1:144  The log is debug message
