@@ -1,4 +1,0 @@
-20:21:25,08 SnowCategory [WARN] write a warn message in log
-20:21:25,08 SnowCategory [NOTICE] write a notice message in log
-20:21:25,08 SnowCategory [INFO] write a info message in log
-20:21:25,08 SnowCategory [DEBUG] write a debug message in log

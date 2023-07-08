@@ -34,17 +34,21 @@ public:
         return *this;
     }
 
+    // 注意习惯，判断和置空指针 !
     ~Stack() {
-        delete [] _arr;
+        if(_arr) {
+            delete [] _arr;
+            _arr = nullptr;
+        }
     }
-    
+
     //判断栈是否为空
-    bool empty() {
+    bool empty() const {
         return _top == -1;
     }	
 
     //判断栈是否已满
-    bool full() {
+    bool full() const {
         return _top == _stackSize - 1;
     }	
 
@@ -62,7 +66,7 @@ public:
     }     
 
     //获取栈顶元素
-    int top() {
+    int top() const{
         if(empty()) return -1; // 用来表示错误
         return _arr[_top];
     }		
@@ -79,7 +83,7 @@ int main(int argc, char* argv[])
     s.push(1);
     s.push(2);
     s.push(3);
-    
+
     cout << "empty =  " << s.empty() << endl;
     cout << "full =  " << s.full() << endl;
     cout << "pop = " << s.pop() << endl;
