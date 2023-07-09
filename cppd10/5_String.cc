@@ -16,7 +16,7 @@ String::String(const char * str)
 {
     if(!str) {
         _pstr = new char[1]();
-        _pstr[0] = '\0';
+        return ;
     }
     _pstr = new char[strlen(str) + 1]();
     strcpy(_pstr, str); 

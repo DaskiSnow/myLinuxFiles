@@ -5,51 +5,75 @@ using std::cin;
 using std::endl;
 using std::string;
 
-class Point {
-public:
-    friend class Line;
-
-    Point(int ix = 0, int iy = 0)
-    : _ix(ix)
-    , _iy(iy)
-    {}
-
-    // 复合赋值运算符重载（成员函数）
-    Point & operator+=(Point & rhs) {
-        ++rhs._ix;        
-        ++rhs._iy;        
-        return rhs;
+struct Data
+{
+    int data = 100;
+    void print()
+    {
+        cout << "Inner struct Data" << endl;
     }
-    
-    // 箭头运算符重载
-    // 总结：返回对象的指针/返回一个重载了箭头运算符的对象
-    Point * operator->() {
-        return this;
-    } 
-
-    int getx() const {
-        return _ix;
-    }
-
-public:
-    int mem = 12;
-private:
-    int _ix;
-    int _iy;
 };
 
-class Line {
+class Layer1 
+{
 public:
-    
+    Layer1(int pubNum = 0, int privNum = 0)
+    : _pubNum(pubNum)
+    , _privNum(privNum)
+    {}
+
+    Data* operator->() {
+        return &_dataStruct;
+    } 
+
+    int getPrivatedNum() const {
+        return _privNum;
+    }
+
+public:
+    int _pubNum;
 private:
-    Point pt1;
-    Point pt2;
+    int _privNum;
+    Data _dataStruct;
+
+};
+
+
+class Layer2 
+{
+public:
+    Layer2(Layer1 & pt)
+    : _pt(pt)
+    {}
+
+    Layer1 * operator->() 
+    {
+        return &_pt;
+    }
+    
+    //Layer1 & operator->()
+    //{
+    //    return _pt;
+    //}
+
+private:
+    Layer1 & _pt;
 };
 
 int main(int argc, char* argv[])
 {
-    Point p(3,4); 
-    cout << p->getx() << endl;
+    Layer1 l1(3, 4);
+    Layer2 l2(l1);
+
+    // Q1: 返回类型为指针类型？
+    // cout << l2->data << endl;        // ×
+    cout << l2->operator->()->data << endl; // √
+    
+
+    // Q2: 返回类型为引用类型呢？
+    // cout << l2->data << endl; // √
+
+    
     return 0;
 }
 
