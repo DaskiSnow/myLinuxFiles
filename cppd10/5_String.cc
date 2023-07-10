@@ -147,6 +147,7 @@ std::ostream &operator<<(std::ostream &os, const String &s)
    return os;
 }
 
+//  To be corrected: 考虑越界问题, 动态获取数据长度vector
 std::istream &operator>>(std::istream &is, String &s)
 {
     is >> s._pstr;
