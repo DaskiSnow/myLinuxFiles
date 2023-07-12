@@ -1,3 +1,5 @@
+// g++ RssReader.cpp tinyxml2.cpp -Wall -g -std=c++11 -o RssReader
+
 #include <iostream>
 #if defined( _MSC_VER )
 	#if !defined( _CRT_SECURE_NO_WARNINGS )
