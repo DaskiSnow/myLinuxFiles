@@ -12,6 +12,9 @@
 #include <cstring>
 #include <ctime>
 
+#include <vector>
+using std::vector;
+
 #if defined( _MSC_VER ) || defined (WIN32)
 	#include <crtdbg.h>
 	#define WIN32_LEAN_AND_MEAN
@@ -56,47 +59,81 @@ int example_3()
     printf( "Name of play (1): %s\n", title );
 }
 
-bool example_4()
+struct RssItem
 {
-    static const char* xml =
-        "<information>"
-        "   <attributeApproach v='2' />"
-        "   <textApproach>"
-        "       <v>2</v>"
-        "   </textApproach>"
-        "</information>";
+    string title;
+    string link;
+    string description;
+    string content;
+};
 
-    int v0, v1;
+class RssReader
+{
+    friend void example_4();
+public:
+    RssReader ();
+    void parseRes(); // 解析
+    void dump(const string & filename); // 输出
+private:
+    vector<RssItem> _res;
 
+};
+
+RssReader::RssReader()
+{
+
+}
+
+// 解析
+void RssReader::parseRes()
+{
+
+} 
+
+// 输出
+void RssReader::dump(const string & filename) 
+{
+
+}
+
+string dealContent(string & content)
+{
+    
+}
+
+void example_4()
+{
+    RssReader reader;
     XMLDocument doc;
-    doc.LoadFile("resources/dream.xml");
-    XMLElement* itemElement = doc.FirstChildElement()->FirstChildElement( "channel" )->FirstChildElement( "item" );
+    doc.LoadFile("resources/RSS.xml");
 
     // 遍历兄弟结点
     XMLElement* itemNode = doc.FirstChildElement()->FirstChildElement( "channel" )->FirstChildElement( "item" ); 
     while(itemNode != nullptr)
     {
-        // XMLElement* 
+        XMLElement* titleNode = itemNode->FirstChildElement( "title" );
+        XMLElement* linkNode = itemNode->FirstChildElement( "link" );
+        XMLElement* descriptionNode = itemNode->FirstChildElement( "description" );
+        XMLElement* contentNode = itemNode->FirstChildElement( "content:encoded" );
+
+        RssItem ri = {titleNode->GetText(), linkNode->GetText(), descriptionNode->GetText(), contentNode->GetText()};
+        reader._res.push_back(ri);
         itemNode = itemNode->NextSiblingElement();//下一个兄弟节点
     }
-    // attributeApproachElement->QueryIntAttribute( "v", &v0 );
 
-    XMLElement* textApproachElement = doc.FirstChildElement()->FirstChildElement( "textApproach" );
-    textApproachElement->FirstChildElement( "v" )->QueryIntText( &v1 );
-
-    cout << "v0 = " << v0 << endl;
-    cout << "v0 = " << v1 << endl;
-
-}
-
-bool myExample_4()
-{
+    for(const auto & ri : reader._res)
+    {
+        cout << "title = " << ri.title <<endl;
+        cout << "link = " << ri.link <<endl;
+        cout << "description = " << ri.description <<endl;
+        cout << "content = " << ri.content <<endl;
+    }
 
 }
 
 int main(int argc, char* argv[])
 {
-    example_3();
+    example_4();
     return 0;
 }
 
