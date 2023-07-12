@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         , make_pair(2, "Xue")
     };
 
-    // 插入(.insert(三种方式), 下标[])
+    // 插入(.insert(pair的三种方式), 下标[])
     students.insert({3, "33"});
     students.insert(pair<int, string>(4, "44"));
     students.insert(make_pair(5, "55"));
@@ -38,11 +38,13 @@ int main(int argc, char* argv[])
     cout << it->second << endl;
     cout << students[2] << endl;
 
-    // 删除(.erase())
+    // 删除(.erase(三种方式))  迭代器、迭代器范围、键值key
     students.erase(it);
+    students.erase(students.begin(), students.end());
+    students.erase(0);
 
     // 修改
-    students[4] = "changed content";
+    students[4] = "changed content";  // 前提：[4]存在
 
     // 遍历(普通for、范围for)
     for(map<int, string>::iterator it = students.begin(); it != students.end(); ++it)
