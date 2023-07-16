@@ -1,4 +1,4 @@
-SRCS := Query.cc
+SRCS := Query.cc TextQuery.cc
 OBJS := $(SRCS:.cc=.o)
 TARGET := Query
 

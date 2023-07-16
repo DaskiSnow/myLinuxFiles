@@ -1,4 +1,4 @@
-#include "TextQuery.cc"
+#include "TextQuery.hh"
 #include <iostream>
 #include <string>
 #include <memory>
@@ -69,24 +69,28 @@ private:
     string _qstr;
 };
 
+Query::Query(const string & qstr)
+: _q(shared_ptr<Query_base>(new WordQuery(qstr)))
+{}
+
 class NotQuery
 : public Query_base
 {
 friend Query operator~(const Query & query);
 public:
     NotQuery(const Query & query)
-    : _query(query)
+    : _q(query)
     {}
 
-    QueryResult eval(const TextQuery & tq) const;  // TODO
+    QueryResult eval(const TextQuery & tq) const;  
     
     string rep() const
     {
-        return "~(" + _query.rep() + ")";
+        return "~(" + _q.rep() + ")";
     }
 
 private:
-    Query _query;
+    Query _q;
 };
 
 Query operator~(const Query & query)
@@ -96,7 +100,18 @@ Query operator~(const Query & query)
 
 QueryResult NotQuery::eval(const TextQuery & tq) const 
 {
-     
+     QueryResult qr = _q.eval(tq);
+     set<int> lines;
+     for(unsigned long i = 0; i < qr._pFile->size(); ++i)
+     {
+         if(qr._lines.count(i) == 0)
+         {
+             lines.insert(i);
+         }
+     }
+     string qstr = rep();
+     int freq = lines.size();
+     return QueryResult(qstr, freq, lines, qr._pFile);
 }
 
 class BinaryQuery
@@ -113,7 +128,7 @@ protected:
     
     virtual string rep() const
     {
-        return "(" + _lq.rep() + _op + _rq.rep() + ")";
+        return "(" + _lq.rep() + " " + _op + " " + _rq.rep() + ")";
     }
 
 protected:
@@ -142,7 +157,19 @@ Query operator&(const Query & lq, const Query & rq)
 
 QueryResult AndQuery::eval(const TextQuery & tq) const
 {
-
+    QueryResult lqr = _lq.eval(tq);
+    QueryResult rqr = _rq.eval(tq);
+    set<int> lines;
+    for(auto & line : lqr._lines)
+    {
+        if(rqr._lines.count(line) > 0)
+        {
+            lines.insert(line);
+        }
+    }
+    string qstr = rep();
+    int freq = lines.size();
+    return QueryResult(qstr, freq, lines, lqr._pFile); 
 }
 
 class OrQuery
@@ -166,17 +193,26 @@ Query operator|(const Query & lq, const Query & rq)
 QueryResult OrQuery::eval(const TextQuery & tq) const
 {
     QueryResult lqr = _lq.eval(tq);
-    QueryResult rqr = _rq.eval(tq);
-    set<int> lines()
+    QueryResult rqr = _rq.eval(tq);  
+    set<int> lines(lqr._lines.begin(), lqr._lines.end());
+    lines.insert(rqr._lines.begin(), rqr._lines.end());
+    string qstr = rep();
+    int freq = lines.size();
+    return QueryResult(qstr, freq, lines, lqr._pFile);
 }
 
-ostream & operator<<(ostream & os, const Query & query)
+ostream & operator<<(ostream & os, const Query & q)
 {
-    return os << query.rep();
+    return os << q.rep();
 }
 
 int main(int argc, char* argv[])
 {
+    ifstream ifs("The_Holy_Bible.txt");
+    TextQuery tq(ifs);
+    Query q = Query("i") & Query("excellent") & ~Query("fail");
+    QueryResult qr = q.eval(tq);
+    qr.print();
     return 0;
 }
 
