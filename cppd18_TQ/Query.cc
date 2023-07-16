@@ -206,13 +206,24 @@ ostream & operator<<(ostream & os, const Query & q)
     return os << q.rep();
 }
 
+std::ostream & operator<<(std::ostream & os, QueryResult qr)
+{
+    os << "Executing Query for: " << qr._qstr << "\n" 
+       << qr._qstr << " occurs " << qr._freq << (qr._freq > 1 ? " times" : " time") << "\n";
+    for(const auto & lineIdx : qr._lines)
+    {
+        os << "(line "<< lineIdx + 1 << ") " << (*qr._pFile)[lineIdx] + "\n"; 
+    }
+    return os;
+}
+
 int main(int argc, char* argv[])
 {
     ifstream ifs("The_Holy_Bible.txt");
     TextQuery tq(ifs);
     Query q = Query("i") & Query("excellent") & ~Query("fail");
     QueryResult qr = q.eval(tq);
-    qr.print();
+    cout << qr << endl;
     return 0;
 }
 

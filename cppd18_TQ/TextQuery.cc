@@ -11,9 +11,9 @@ void QueryResult::print()
 }
 
 TextQuery::TextQuery(ifstream & ifs)
-: _pFile(new vector<string>)
-, _pStrToFreq(new map<string, int>)
-, _pStrToLine(new map<string, set<int>>)
+    : _pFile(new vector<string>)
+    , _pStrToFreq(new map<string, int>)
+    , _pStrToLine(new map<string, set<int>>)
 {
     if(!ifs) {
         cerr << "open file failed" << endl;
@@ -49,7 +49,7 @@ QueryResult TextQuery::query(const string & qstr) const
         // 单词不存在
         static set<int> nonline;
         return QueryResult(qstr, 0, nonline, _pFile);
-        
+
     }
     else
     {
