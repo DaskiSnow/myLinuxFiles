@@ -1,0 +1,16 @@
+21:26:17,09 SnowCategory [INFO]  MyloggerTemplate.cc:LogInfo:131  This is an info message. number = 100, str = hello, log4cpp
+
+21:26:17,09 SnowCategory [ERROR]  MyloggerTemplate.cc:LogError:139  This is an error message. number = 100, str = hello, log4cpp
+
+21:26:17,09 SnowCategory [WARN]  MyloggerTemplate.cc:LogWarn:146  This is a warn message. number = 100, str = hello, log4cpp
+
+21:26:17,09 SnowCategory [DEBUG]  MyloggerTemplate.cc:LogDebug:154  This is a debug message. number = 100, str = hello, log4cpp
+
+21:26:20,09 SnowCategory [INFO]  MyloggerTemplate.cc:LogInfo:131  This is an info message. number = 100, str = hello, log4cpp
+
+21:26:20,09 SnowCategory [ERROR]  MyloggerTemplate.cc:LogError:139  This is an error message. number = 100, str = hello, log4cpp
+
+21:26:20,09 SnowCategory [WARN]  MyloggerTemplate.cc:LogWarn:146  This is a warn message. number = 100, str = hello, log4cpp
+
+21:26:20,09 SnowCategory [DEBUG]  MyloggerTemplate.cc:LogDebug:154  This is a debug message. number = 100, str = hello, log4cpp
+
