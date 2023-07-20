@@ -52,9 +52,11 @@ public:
     {
         if(isEmpty())
         {
+            static T nondata;
             cerr << "Queue is empty!" << endl;
-            return "";
+            return nondata;
         }
+        /* T temp = _arr[_front]; */
         _front = (_front + 1) % kSize;
         --_size;
         return _arr[(_front - 1 + kSize) % kSize];
@@ -64,8 +66,9 @@ public:
     {
         if(isEmpty())
         {
+            static T nondata;
             cerr << "Queue is empty!" << endl;
-            return "";
+            return nondata;
         }
         return _arr[_front];
     }
