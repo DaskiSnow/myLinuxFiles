@@ -26,6 +26,7 @@ public:
         return _pInstance;
     }
 
+    // 对于单例模式之内部类来说, 可以不设置destroy
     static void destroy()
     {
         if(_pInstance)
@@ -36,7 +37,13 @@ public:
 private:
     class AutoRelease
     {
-
+        ~AutoRelease()
+        {
+            if(Singleton::_pInstance)
+            {
+                delete _pInstance;
+            }
+        }
     };
 
 private:
@@ -45,6 +52,7 @@ private:
     static T * _pInstance; 
 };
 
+// 注意：这个要在.cpp文件中初始化
 template<typename T>
 T * Singleton<T>::_pInstance =  nullptr;
 
