@@ -44,18 +44,18 @@ public:
         }
     }
 
-    void pop_back()
+    void pop_back() 
     {
         --_finish;
         _alloc.destroy(_finish);
     }
 
-    int size()
+    int size() const
     {
         return _finish - _start;
     }     
 
-    int capacity()
+    int capacity() const
     {
         return _end_of_storage - _start;
     }
