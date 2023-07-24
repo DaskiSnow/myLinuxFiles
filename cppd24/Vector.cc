@@ -8,6 +8,7 @@ class Vector
 { 
 friend void test();
 friend void test2();
+using iterator = T *;
 public:     
     Vector()
     : _start(0)
@@ -26,6 +27,16 @@ public:
 
         // 回收未初始化的空间
         _alloc.deallocate(_start, _end_of_storage - _start);
+    }
+
+    iterator begin() const
+    {
+        return _start;
+    }
+
+    iterator end() const
+    {
+        return _finish;
     }
 
     void push_back(const T & x)
