@@ -6,6 +6,7 @@
 #include <set>
 #include <list>
 #include <tuple>
+#include <queue>
 using namespace std;
 
 class Point
@@ -126,7 +127,7 @@ void test6()
 // 容器适配器priority_queue练习
 void test7()
 {
-
+    
 }
 
 int main(int argc, char* argv[])
