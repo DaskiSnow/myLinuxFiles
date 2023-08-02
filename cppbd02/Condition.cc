@@ -1,6 +1,6 @@
 #include "include/Condition.hh"
 
-Condition::Condition(pthread_mutex_t *pmutex)
+Condition::Condition(Mutex *pmutex)
 {
     if(pmutex == NULL)
     {
@@ -20,7 +20,7 @@ Condition::~Condition()
 
 void Condition::wait()
 {
-    int ret = pthread_cond_wait(&_cond, _pmutex);
+    int ret = pthread_cond_wait(&_cond, _pmutex->getMutex());
     THREAD_ERROR_CHECK(ret, "pthread_cond_wait");
 }
 

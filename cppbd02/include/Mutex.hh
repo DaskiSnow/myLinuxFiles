@@ -23,6 +23,7 @@ public:
     void lock();
     int trylock();
     void unlock();
+    pthread_mutex_t* getMutex();
 private:
     pthread_mutex_t _mutex;
 };

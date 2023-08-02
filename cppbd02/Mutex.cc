@@ -29,3 +29,8 @@ void Mutex::unlock()
     THREAD_ERROR_CHECK(ret, "pthread_mutex_unlock");
 }
 
+pthread_mutex_t* Mutex::getMutex()
+{
+    return &_mutex;
+}
+

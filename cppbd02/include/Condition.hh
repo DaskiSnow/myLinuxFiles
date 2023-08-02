@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Mutex.hh"
 
 #define THREAD_ERROR_CHECK(retval, msg) \
 {                                       \
@@ -18,13 +19,13 @@
 class Condition
 {
 public:
-    Condition(pthread_mutex_t *pmutex);
+    Condition(Mutex *pmutex);
     ~Condition();
     void wait();
     void signal();
     void broadcast();
 private:
-    pthread_mutex_t *_pmutex;
+    Mutex *_pmutex;
     pthread_cond_t _cond;
 };
 

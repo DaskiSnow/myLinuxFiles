@@ -21,5 +21,6 @@ $(EXE):$(OBJS)
 
 clean:
 	$(RM) $(EXES)
+	$(RM) $(OBJS)
 
 rebulid: clean out
