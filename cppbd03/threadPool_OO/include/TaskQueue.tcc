@@ -1,4 +1,7 @@
-using namespace std;
+#ifndef __TASKQUEUE_TCC__
+#define __TASKQUEUE_TCC__
+
+#include "TaskQueue.hh"
 
 template<typename T>
 TaskQueue<T>::TaskQueue(size_t cap)
@@ -20,7 +23,7 @@ void TaskQueue<T>::push(const T & value)
     // 临界区：生产货物
     _q.push(value);
     ++_size;
-    printf("produce: _size = %ld, _capacity = %ld\n", _size, _capacity);
+    /* printf("produce: _size = %ld, _capacity = %ld\n", _size, _capacity); */
     _notEmpty.broadcast();
     _mutex.unlock();
 }
@@ -36,7 +39,7 @@ void TaskQueue<T>::pop()
     // 临界区：消费货物
     _q.pop();
     --_size;
-    printf("consume: _size = %ld, _capacity = %ld\n", _size, _capacity);;
+    /* printf("consume: _size = %ld, _capacity = %ld\n", _size, _capacity);; */
     _notFull.broadcast();
     _mutex.unlock();
 }
@@ -65,3 +68,11 @@ bool TaskQueue<T>::isFull()
     return _size == _capacity;
 }
 
+template<typename T>
+void wakeup()
+{
+    _notEmpty.broadcast();
+    _notFull.broadcast();
+}
+
+#endif

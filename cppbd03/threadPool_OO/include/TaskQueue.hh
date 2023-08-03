@@ -15,6 +15,7 @@ public:
 private:
     bool isEmpty();
     bool isFull();
+    void wakeup();  // 结束时唤醒子线程, 主线程结束时设置_isExit后调用, 防止子线程仍处于等待任务状态而无法退出
 private:
     std::size_t _capacity;
     std::size_t _size;

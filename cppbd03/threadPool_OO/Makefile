@@ -18,7 +18,7 @@ $(EXE):$(OBJS)
 	$(RM) $(OBJS)
 
 %.o:%.cc
-	$(CC) $< -c $@ $(CFLAGS)
+	$(CC) $< -c -o $@ $(CFLAGS)
 
 clean:
 	$(RM) $(EXE)

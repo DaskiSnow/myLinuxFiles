@@ -3,7 +3,7 @@
 
 #include "Task.hh"
 
-class MyClass
+class MyTask
 : public Task
 {
     void process() override;

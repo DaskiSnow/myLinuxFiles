@@ -6,5 +6,6 @@ WorkThread::WorkThread(ThreadPool & pool)
 
 void WorkThread::run()
 {
-    // TODO
+    // 调用_pool的doTask
+    _pool.doTask();
 }
