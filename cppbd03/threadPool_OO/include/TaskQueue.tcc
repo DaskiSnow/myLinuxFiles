@@ -9,15 +9,21 @@ TaskQueue<T>::TaskQueue(size_t cap)
 , _mutex(Mutex())
 , _notEmpty(Condition(&_mutex))
 , _notFull(Condition(&_mutex))
+, _isExit(false)
 {}
 
 template<typename T>
 void TaskQueue<T>::push(const T & value)
 {
     _mutex.lock();
-    while(isFull())
+    while(isFull() && !_isExit)
     {
         _notFull.wait();
+    }
+    if(_isExit)
+    {
+        _mutex.unlock();
+        return;
     }
     // 临界区：生产货物
     _q.push(value);
@@ -31,9 +37,14 @@ template<typename T>
 void TaskQueue<T>::pop()
 {
     _mutex.lock();
-    while(isEmpty())
+    while(isEmpty() && !_isExit)
     {
         _notEmpty.wait();
+    }
+    if(_isExit)
+    {
+        _mutex.unlock();
+        return;
     }
     // 临界区：消费货物
     _q.pop();
@@ -64,6 +75,7 @@ bool TaskQueue<T>::isFull()
 template<typename T>
 void TaskQueue<T>::wakeup()
 {
+    _isExit = true;
     _notEmpty.broadcast();
     _notFull.broadcast();
 }

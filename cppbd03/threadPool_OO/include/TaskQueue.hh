@@ -24,6 +24,7 @@ private:
     Condition _notEmpty;
     Condition _notFull;
     std::queue<T> _q;
+    bool _isExit;
 };
 #include "TaskQueue.tcc"
 #endif
