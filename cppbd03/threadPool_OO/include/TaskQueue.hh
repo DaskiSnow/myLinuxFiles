@@ -11,7 +11,7 @@ friend class ThreadPool;
 public:
     TaskQueue(size_t cap);
     void push(const T & value);
-    void pop();
+    T & pop();
     T & front();
 private:
     bool isEmpty();

@@ -58,13 +58,19 @@ void ThreadPool::doTask()
         Task * ptask = getTask();
 
         // 执行任务(2nd引用多态)
-        ptask->process();     
+        if(ptask)
+        {
+            ptask->process();     
+        }
+        else
+        {
+            printf("isExit = true! A WorkThread Exit!\n");
+        }
     }
 }
 
 Task * ThreadPool::getTask()
 {
-    Task * temp = _taskQue.front();
-    _taskQue.pop();
+    Task * temp = _taskQue.pop();
     return temp;
 }

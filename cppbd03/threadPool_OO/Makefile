@@ -15,7 +15,7 @@ CFLAGS := -Wall -g -std=c++11 -lpthread  #-fsanitize=leak
 
 $(EXE):$(OBJS)
 	$(CC) $^ -o $@ $(CFLAGS)
-	$(RM) $(OBJS)
+#	$(RM) $(OBJS)
 
 %.o:%.cc
 	$(CC) $< -c -o $@ $(CFLAGS)
