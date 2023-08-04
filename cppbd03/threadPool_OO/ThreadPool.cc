@@ -21,7 +21,7 @@ void ThreadPool::start()
     {
         Thread * temp = new WorkThread(*this);
         temp->start();   // 创建底层线程, 并执行调用doTask
-        _threads.push_back(temp);
+        _threads.push_back(unique_ptr<Thread>(temp));
     }
 }
 
@@ -40,13 +40,13 @@ void ThreadPool::stop()
     // 执行依次对每个子线程执行join(阻塞)
     for(size_t i = 0; i < _threadNum; ++i)
     {
-        _threads[i].join();
+        _threads[i]->join();
     }
 }                
 
 void ThreadPool::addTask(Task *ptask)
 {
-    _taskQue(ptask);
+    _taskQue.push(ptask);
 }
 
 void ThreadPool::doTask()
@@ -55,16 +55,16 @@ void ThreadPool::doTask()
     while(!_isExit)
     {
         // 取任务
-        Task & ptask = getTask();
+        Task * ptask = getTask();
 
         // 执行任务(2nd引用多态)
-        ptask.process();     
+        ptask->process();     
     }
 }
 
-Task & ThreadPool::getTask()
+Task * ThreadPool::getTask()
 {
-    Task & temp = _taskQue.front();
+    Task * temp = _taskQue.front();
     _taskQue.pop();
     return temp;
 }

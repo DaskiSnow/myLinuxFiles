@@ -1,6 +1,5 @@
 #ifndef __TASKQUEUE_TCC__
 #define __TASKQUEUE_TCC__
-
 #include "TaskQueue.hh"
 
 template<typename T>
@@ -47,12 +46,6 @@ void TaskQueue<T>::pop()
 template<typename T>
 T & TaskQueue<T>::front()
 {
-    if(isEmpty())
-    {
-        // 不可能进入到这里面
-        static T nondate;
-        return nondate;
-    }
     return _q.front();
 }
 
@@ -69,7 +62,7 @@ bool TaskQueue<T>::isFull()
 }
 
 template<typename T>
-void wakeup()
+void TaskQueue<T>::wakeup()
 {
     _notEmpty.broadcast();
     _notFull.broadcast();

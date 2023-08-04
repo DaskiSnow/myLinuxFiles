@@ -19,12 +19,12 @@ public:
     void addTask(Task *ptask);  // 添加Task到任务队列中(主线程)
 private:
     void doTask();              // getTask->执行Task的process(子线程)
-    Task & getTask();            // 取任务(子线程->doTask调用) 
+    Task * getTask();            // 取任务(子线程->doTask调用) 
 private:
     size_t _threadNum;
     size_t _queSize;
     vector<unique_ptr<Thread>> _threads;    // 因为多态才用指针
-    TaskQueue<Task> _taskQue;
+    TaskQueue<Task *> _taskQue;
     bool _isExit;
 };
 

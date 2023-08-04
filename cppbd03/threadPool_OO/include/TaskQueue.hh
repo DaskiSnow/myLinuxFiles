@@ -7,6 +7,7 @@
 template<typename T>
 class TaskQueue
 {
+friend class ThreadPool;
 public:
     TaskQueue(size_t cap);
     void push(const T & value);
