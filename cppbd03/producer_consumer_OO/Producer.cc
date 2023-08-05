@@ -11,6 +11,7 @@ void Producer::run()
     while(1)
     {
         _tq.push(_id);
+        printf("produce\n");
         sleep(2);
     }
 }
