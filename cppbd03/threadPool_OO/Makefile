@@ -2,14 +2,14 @@ SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := .
 SRCS := $(wildcard $(SRC_DIR)/*.cc)
-OBJS := $(patsubst %.cc, $(OBJ_DIR)/%.o, $(SRCS))
+OBJS := $(patsubst $(SRC_DIR)/%.cc, $(OBJ_DIR)/%.o, $(SRCS))
+# EXES := $(SRCS: %.cc=%)  # 从.cc生成可执行文件
 EXE := main
-#EXES := $(SRCS: %.cc=%)  # 从.cc生成可执行文件
 
 CC := g++
 CFLAGS  := -Wall -g -std=c++11 #-fsanitize=leak
 LDFALGS := -lpthread  
-CPPFALGS:= -DEBUG
+CPPFALGS:= #-DEBUG
 # 开启内存泄露检查功能：-fsanitize=leak
 # 开启地址越界检查功能：-fsanitize=address
 # 开启越界详细错误信息：-fno-omit-frame-pointer
@@ -20,11 +20,11 @@ CPPFALGS:= -DEBUG
 out:$(EXE)
 
 $(EXE):$(OBJS)
-	$(CC) $^ -o $@ $(CFLAGS) $(LDFALGS)
-#	$(RM) $(OBJS)
+	$(CC) $^ -o $@ $(CFLAGS) $(LDFALGS) $(CPPFALGS)
+#	$(RM) $(OBJ_DIR)/%.o
 
-%.o:%.cc
-	$(CC) $< -c -o $@ $(CFLAGS)
+$(OBJ_DIR)/%.o:$(SRC_DIR)/%.cc
+	$(CC) $< -c -o $@ $(CFLAGS) $(CPPFALGS)
 
 clean:
 	$(RM) $(EXE)
