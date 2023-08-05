@@ -35,6 +35,7 @@ void ThreadPool::stop()
 
     // 置_isExit标志位, 并唤醒可能的S线程
     _isExit = true;
+    printf("_isExit == true!\n");
     _taskQue.wakeup();
 
     // 执行依次对每个子线程执行join(阻塞)
@@ -56,7 +57,6 @@ void ThreadPool::doTask()
     {
         // 取任务
         Task * ptask = getTask();
-        if(ptask == nullptr) printf("null2");
 
         // 执行任务(2nd引用多态)
         if(ptask)
@@ -65,7 +65,8 @@ void ThreadPool::doTask()
         }
         else
         {
-            /* printf("isExit = true! A WorkThread Exit!\n"); */
+            // 返回了空指针, 说明线程检测到结束标志
+            printf("isExit = true! A WorkThread Exit!\n");
         }
     }
 }
@@ -73,9 +74,5 @@ void ThreadPool::doTask()
 Task * ThreadPool::getTask()
 {
     Task * temp = _taskQue.pop();
-        if(temp == nullptr) 
-        {printf("null\n");
-            return NULL;
-        }
     return temp;
 }

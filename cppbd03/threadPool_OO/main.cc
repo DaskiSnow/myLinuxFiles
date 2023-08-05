@@ -17,9 +17,9 @@ void test2()
 {
     MyTask mytask;
     static DueTask duetask;
-    ThreadPool pool(6, 1000);
+    ThreadPool pool(16, 1000);
     pool.start();
-    int cnt = 10000000;
+    int cnt = 1000000;
     while(cnt--)
     {
         pool.addTask(&mytask);
