@@ -8,7 +8,7 @@ using namespace std;
 
 void test()
 {
-    TaskQueue<int> tq(5);
+    TaskQueue<int> tq(1);
     Producer p1(1, tq);
     Consumer c2(2, tq);
     Consumer c3(3, tq);

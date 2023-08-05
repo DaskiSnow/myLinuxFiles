@@ -11,6 +11,7 @@ void Consumer::run()
     while(1)
     {
         _tq.pop();
+        printf("consume\n");
         sleep(2);
     }
 }
