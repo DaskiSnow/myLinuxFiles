@@ -6,6 +6,7 @@
 class MyTask
 : public Task
 {
+public:
     void process() override;
 };
 

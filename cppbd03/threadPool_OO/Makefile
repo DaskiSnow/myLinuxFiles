@@ -4,7 +4,7 @@ OBJS := $(patsubst %.cc, %.o, $(SRCS))
 EXE := main
 
 CC := g++
-CFLAGS := -Wall -g -std=c++11 -lpthread  #-fsanitize=leak
+CFLAGS := -Wall -g -std=c++11 -lpthread -O0  #-fsanitize=leak
 #开启内存泄露检查功能：-fsanitize=leak
 #开启地址越界检查功能：-fsanitize=address
 #开启越界详细错误信息：-fno-omit-frame-pointer

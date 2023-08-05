@@ -28,13 +28,12 @@ void TaskQueue<T>::push(const T & value)
     // 临界区：生产货物
     _q.push(value);
     ++_size;
-    /* printf("produce: _size = %ld, _capacity = %ld\n", _size, _capacity); */
     _notEmpty.broadcast();
     _mutex.unlock();
 }
 
 template<typename T>
-T & TaskQueue<T>::pop()
+T TaskQueue<T>::pop()
 {
     _mutex.lock();
     while(isEmpty() && !_isExit)
@@ -48,17 +47,17 @@ T & TaskQueue<T>::pop()
         return nondata;
     }
     // 临界区：消费货物
-    T & temp = _q.front();
+    T temp = _q.front();
     _q.pop();
     --_size;
-    /* printf("consume: _size = %ld, _capacity = %ld\n", _size, _capacity);; */
     _notFull.broadcast();
+    if(temp == NULL) printf("NULL\n");
     _mutex.unlock();
     return temp;
 }
 
 template<typename T>
-T & TaskQueue<T>::front()
+T TaskQueue<T>::front()
 {
     _mutex.lock();
     while(isEmpty() && !_isExit)
