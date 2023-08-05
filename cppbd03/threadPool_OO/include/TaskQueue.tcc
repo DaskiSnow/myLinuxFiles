@@ -32,6 +32,7 @@ void TaskQueue<T>::push(const T & value)
     _mutex.unlock();
 }
 
+// PS: !!此处不能为引用, 否则将返回了一个局部变量的引用!!
 template<typename T>
 T TaskQueue<T>::pop()
 {
