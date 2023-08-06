@@ -19,7 +19,7 @@ void ThreadPool::start()
     // 创建并启动子线程
     for(size_t i = 0; i < _threadNum; ++i)
     {
-        Thread * temp = new WorkThread(*this);
+        WorkThread * temp = new WorkThread(*this);
         temp->start();   // 创建底层线程, 并执行调用doTask
         _threads.push_back(unique_ptr<Thread>(temp));
     }
