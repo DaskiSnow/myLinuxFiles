@@ -1,9 +1,8 @@
 #include "include/Thread.hh"
 
-Thread::Thread(ThreadPool & pool, ThreadCallback cb)
+Thread::Thread(ThreadCallback cb)
 : _tid(0)
 , _cb(std::move(cb))
-, _pool(pool)
 , _isRunning(false)
 {}
 

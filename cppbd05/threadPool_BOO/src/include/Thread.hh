@@ -20,7 +20,7 @@ using ThreadCallback = std::function<void()>;
 class Thread
 {
 public:
-    Thread(ThreadPool & pool, ThreadCallback cb);
+    Thread(ThreadCallback cb);
     virtual ~Thread();
     void start();
     void join();
@@ -31,7 +31,7 @@ private:
 private:
     pthread_t _tid;
     ThreadCallback _cb;
-    ThreadPool & _pool;
+    /* ThreadPool & _pool; */
     bool _isRunning;
 };
 

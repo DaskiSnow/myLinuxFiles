@@ -18,7 +18,7 @@ void ThreadPool::start()
     // 创建并启动子线程
     for(size_t i = 0; i < _threadNum; ++i)
     {
-        Thread * temp = new Thread(*this, bind(&ThreadPool::doTask, this));
+        Thread * temp = new Thread(bind(&ThreadPool::doTask, this));
         temp->start();   // 创建底层线程, 并执行调用doTask
         _threads.push_back(unique_ptr<Thread>(temp));
     }
