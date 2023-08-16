@@ -33,7 +33,7 @@ public:
         T pivot = _vec[right]; 
         int store_idx = left;
         int i = left;
-        while(i < right)
+        while(i <= right)
         {
             if(_com(_vec[i], pivot))   // < 或 >
             {
