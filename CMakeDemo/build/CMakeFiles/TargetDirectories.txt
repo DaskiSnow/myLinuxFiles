@@ -1,0 +1,5 @@
+/home/daskisnow/myLinuxFiles/rd01/build/CMakeFiles/edit_cache.dir
+/home/daskisnow/myLinuxFiles/rd01/build/CMakeFiles/rebuild_cache.dir
+/home/daskisnow/myLinuxFiles/rd01/build/src/CMakeFiles/main.dir
+/home/daskisnow/myLinuxFiles/rd01/build/src/CMakeFiles/edit_cache.dir
+/home/daskisnow/myLinuxFiles/rd01/build/src/CMakeFiles/rebuild_cache.dir
