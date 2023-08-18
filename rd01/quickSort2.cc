@@ -1,9 +1,12 @@
 #include <func.hh>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
 void swap(int & a, int & b)
 {
+    if(a == b) return;
     a = a ^ b;
     b = a ^ b;
     a = a ^ b;
@@ -11,6 +14,14 @@ void swap(int & a, int & b)
 
 int partition(int arr[], int low, int high)
 {
+    // 随机选取
+    srand(clock());
+    int randIdx = low + (rand() % (high - low + 1));
+    /* printf("%d, %d\n", arr[low], arr[randIdx]); */
+    swap(arr[low], arr[randIdx]);
+    /* printf("%d, %d\n", arr[low], arr[randIdx]); */
+
+    // 听说可以避免抖动现象, 但每次移动赋值操作更多
     int pivot = arr[low];
     int storeIdx = low;
     int i = low;
