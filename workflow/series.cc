@@ -97,7 +97,7 @@ void test()
     writeReq->set_request("HSET", {"student", "1", "Snow", "2", "Hazuyuki", "3", "Daski"});
     readReq->set_request("HGETALL", {"student"});
 
-    // 2. 将写读任务放置在序列容器中
+    // 2. 将写读任务放置在序列容器中(运行前创建序列容器并添加任务)
     SeriesWork * series = Workflow::create_series_work(redisWriteTask, nullptr); 
     series->push_back(redisReadTask);
     

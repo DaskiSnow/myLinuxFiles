@@ -88,7 +88,7 @@ void test()
 {
     signal(SIGINT, handler);
 
-    // 1. 创建两个redis任务, 一个写, 一个读, 并将读任务放在写任务的序列容器中
+    // 1. 创建两个redis任务, 一个写, 一个读, 并将读任务放在写任务的序列容器中(运行时自动创建序列容器, 运行时添加任务)
     string url = "redis://127.0.0.1:6379"; 
     /* WFRedisTask * redisWriteTask = WFTaskFactory::create_redis_task(url, 1, redisCallback); */    
     WFRedisTask * redisReadTask = WFTaskFactory::create_redis_task(url, 1, redisCallback);    
