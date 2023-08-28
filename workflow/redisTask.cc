@@ -1,6 +1,5 @@
 #include <func.hh>
 #include <signal.h>
-#include "workflow/WFRedisServer.h"
 #include "workflow/RedisMessage.h"
 #include "workflow/WFFacilities.h"
 using namespace std;
